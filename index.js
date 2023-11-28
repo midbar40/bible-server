@@ -5,9 +5,9 @@ const mongoose = require('mongoose')
 const axios = require('axios')
 const cors = require('cors')
 const config  = require('./config')
-const biblesRouter = require('../backend/src/routes/bibles')
-const usersRouter = require('../backend/src/routes/users')
-const praysRouter = require('../backend/src/routes/prays')
+const biblesRouter = require('./src/routes/bibles')
+const usersRouter = require('./src/routes/users')
+const praysRouter = require('./src/routes/prays')
 
 // 몽고 DB 연결
 mongoose.connect(config.MONGODB_URL)
