@@ -20,6 +20,17 @@ router.get('/', expressAsyncHandler(async(req, res) => {
 }
 }))
 
+// 성경 랜덤조회
+router.get('/random', expressAsyncHandler(async(req, res) => {
+    console.log(req.query)
+    try{
+        const bibles = await Bible.aggregate([{$sample: {size: 1}}])
+        res.status(200).json({ code: 200, message: '성경조회 성공', bibles})
+    } catch(err){
+        res.status(500).send()
+    }
+}))
+
 // 성경클릭한 성서만 조회
 router.get('/read', expressAsyncHandler(async(req, res) => {
     console.log(req.query)
