@@ -48,7 +48,7 @@ router.get('/read', expressAsyncHandler(async(req, res) => {
     console.log(req.query)
 
     try{
-        const bible = await Bible.find({title: req.query.query})
+        const bible = await Bible.find({title: {$regex : req.query.query}})
         res.status(200).json({ code: 200, message: '성서본문조회성공', bible})
     } catch(err){
         res.status(500).send()
