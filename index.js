@@ -6,8 +6,14 @@ const axios = require('axios')
 const cors = require('cors')
 const config  = require('./config')
 const biblesRouter = require('./src/routes/bibles')
+<<<<<<< HEAD
 const usersRouter = require('./src/routes/users')
 const praysRouter = require('./src/routes/prays')
+=======
+// const usersRouter = require('./src/routes/users')
+const praysRouter = require('./src/routes/prays')
+const cookieParser = require('cookie-parser')
+>>>>>>> a32e681f0bc0ff0bb670235ddafafda1dea53b09
 
 // 몽고 DB 연결
 mongoose.connect(config.MONGODB_URL)
@@ -23,10 +29,17 @@ let corsOptions = {
 app.use(cors(corsOptions)) // cors 설정, 이걸 계속 빼먹네..
 app.use(express.json()) //request body 파싱 
 app.use(logger('tiny')) // logger 설정
+<<<<<<< HEAD
 
 
 app.use('/api/bible', biblesRouter)
 app.use('/api/users', usersRouter)
+=======
+app.use(cookieParser())
+
+app.use('/api/bible', biblesRouter)
+// app.use('/api/users', usersRouter)
+>>>>>>> a32e681f0bc0ff0bb670235ddafafda1dea53b09
 app.use('/api/prays', praysRouter)
 
 // API 설계
