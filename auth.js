@@ -1,8 +1,6 @@
 const config = require('./config')
 const jwt = require('jsonwebtoken')
 
-<<<<<<< HEAD
-=======
 const generateToken = (user) => { //토큰 생성
     return jwt.sign({
         _id: user._id, // 사용자 정보(json)
@@ -49,4 +47,3 @@ module.exports = {
     isAuth,
     isAdmin,
 }
->>>>>>> a32e681f0bc0ff0bb670235ddafafda1dea53b09

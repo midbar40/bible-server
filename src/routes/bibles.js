@@ -21,11 +21,11 @@ router.get('/', expressAsyncHandler(async(req, res) => {
 
 // 성경전문검색
 router.get('/search', expressAsyncHandler(async(req, res) => {
-    console.log(req.query)
+    console.log(req.query.query)
     try{
     const bibles = await Bible.find({content: {$regex: req.query.query}})
+    console.log('바이블서버', bibles)
     res.status(200).json({ code: 200, message: '성경검색 성공', bibles})
-    // console.log(bibles)
 } catch(err){
     res.status(500).send()
 }
@@ -36,6 +36,7 @@ router.get('/random', expressAsyncHandler(async(req, res) => {
     console.log(req.query)
     try{
         const bibles = await Bible.aggregate([{$sample: {size: 1}}])
+        console.log('조회결과 :',bibles)
         res.status(200).json({ code: 200, message: '성경조회 성공', bibles})
     } catch(err){
         res.status(500).send()
