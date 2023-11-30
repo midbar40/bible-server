@@ -28,22 +28,23 @@ const isAuth = (req, res, next) => { // 권한확인
                 res.status(419).json({ code: 419, message: 'token expired!'})
             }else if(err){
                 res.status(401).json({ code: 401, message: 'Invalid Token!'})
-            }
-            req.user = userInfo
-            next()
+            } else {
+                req.user = userInfo
+                res.status(200).json({ code: 200, message: '유효한 토큰입니다.'})
+            }            
         })
     }
 }
 
-const isAdmin = (req, res, next) => { // 관리자 확인
-    if(req.user && req.user.isAdmin){
-        next()
-    }else{
-        res.status(401).json({ code: 401, messgae: 'You are not valid admin user !'})
-    }
-}
+// const isAdmin = (req, res, next) => { // 관리자 확인
+//     if(req.user && req.user.isAdmin){
+//         next()
+//     }else{
+//         res.status(401).json({ code: 401, messgae: 'You are not valid admin user !'})
+//     }
+// }
 module.exports = {
     generateToken,
     isAuth,
-    isAdmin,
+    // isAdmin,
 }

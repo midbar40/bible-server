@@ -6,7 +6,7 @@ const axios = require('axios')
 const cors = require('cors')
 const config  = require('./config')
 const biblesRouter = require('./src/routes/bibles')
-// const usersRouter = require('./src/routes/users')
+const usersRouter = require('./src/routes/users')
 const praysRouter = require('./src/routes/prays')
 const cookieParser = require('cookie-parser')
 
@@ -27,7 +27,7 @@ app.use(logger('tiny')) // logger 설정
 app.use(cookieParser())
 
 app.use('/api/bible', biblesRouter)
-// app.use('/api/users', usersRouter)
+app.use('/api/users', usersRouter)
 app.use('/api/prays', praysRouter)
 
 // API 설계
