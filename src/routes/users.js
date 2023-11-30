@@ -1,7 +1,7 @@
 const express = require('express')
 const User = require('../models/User')
 const expressAsyncHandler = require('express-async-handler')
-const { validationResult } = require('express-validator')
+const { body, validationResult } = require('express-validator')
 
 
 const mongoose = require('mongoose')
@@ -50,7 +50,6 @@ router.post('/register', expressAsyncHandler(async(req, res, next)=>{
                 .withMessage('password must be string')
                 .bail()
         ]
-
         const user = new User({
             name: req.body.name,
             email: req.body.email,
