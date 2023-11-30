@@ -1,7 +1,7 @@
 const express = require('express')
 const User = require('../models/User')
 const expressAsyncHandler = require('express-async-handler')
-const { body, validationResult } = require('express-validator')
+const { validationResult } = require('express-validator')
 const validate = require('../../validator')
 const mongoose = require('mongoose')
 const { generateToken } = require('../../auth')
@@ -12,7 +12,7 @@ const router = express.Router()
 
 
 router.post('/register', 
-validate
+validate()
 ,expressAsyncHandler(async(req, res, next)=>{
     console.log('리퀘바디 : ', req.body)   
     const errors = validationResult(req)
