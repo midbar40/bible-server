@@ -12,8 +12,7 @@ const router = express.Router()
 
 
 router.post('/register', 
-validate()
-,expressAsyncHandler(async(req, res, next)=>{
+validate,expressAsyncHandler(async(req, res, next)=>{
     console.log('리퀘바디 : ', req.body)   
     const errors = validationResult(req)
     if(!errors.isEmpty()){

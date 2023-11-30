@@ -1,7 +1,6 @@
 const { body } = require('express-validator');
 
-const validate = (values) => 
-    [
+export default validate = [
         body('name')
             .exists()
             .withMessage('이름을 입력하세요')
@@ -27,5 +26,4 @@ const validate = (values) =>
             .withMessage('비밀번호는 문자만 입력가능합니다')
             .bail()
         ]
-        
-module.exports = validate
+
