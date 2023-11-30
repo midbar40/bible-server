@@ -47,7 +47,7 @@ body('password')
         res.status(400).json({
             code:400,
             message: 'Invalid Form data for user',
-            error: errors.array()
+            error: errors
         })
     }else{
         const user = new User({
