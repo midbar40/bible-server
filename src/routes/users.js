@@ -2,7 +2,11 @@ const express = require('express')
 const User = require('../models/User')
 const expressAsyncHandler = require('express-async-handler')
 const { validationResult } = require('express-validator')
-const validate = require('../../validator')
+const {    
+    validateUserName,
+    validateUserEmail,
+    validateUserPassword
+} = require('../../validator')
 const mongoose = require('mongoose')
 const { generateToken } = require('../../auth')
 const {  JWT_SECRET } = require('../../config')
@@ -12,8 +16,11 @@ const router = express.Router()
 
 
 router.post('/register', 
-validate,expressAsyncHandler(async(req, res, next)=>{
-    console.log('리퀘바디 : ', req.body)   
+[
+    validateUserName(),
+    validateUserEmail(),
+    validateUserPassword()
+],expressAsyncHandler(async(req, res, next)=>{
     const errors = validationResult(req)
     console.log('validationResult에러 : ', errors)
     if(!errors.isEmpty()){
@@ -26,7 +33,6 @@ validate,expressAsyncHandler(async(req, res, next)=>{
         const user = new User({
             name: req.body.name,
             email: req.body.email,
-            userId: req.body.userId,
             password: req.body.password
         })
         const newUser = await user.save() // DB에 User 생성
@@ -50,7 +56,7 @@ validate,expressAsyncHandler(async(req, res, next)=>{
 ))
 
 router.post('/login', expressAsyncHandler(async(req, res, next)=>{
-    const userId = req.body.id
+    const userId = req.body.email
     const userPw = req.body.pw
     console.log(id, pw)
    try{ 
