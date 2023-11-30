@@ -12,7 +12,6 @@ const router = express.Router()
 
 
 router.post('/register', expressAsyncHandler(async(req, res, next)=>{
-    const checkUserCreated = expressAsyncHandler(async(req, res, next) => {
     const errors = validationResult(req)
     if(!errors.isEmpty()){
         console.log(errors.array())
@@ -22,7 +21,7 @@ router.post('/register', expressAsyncHandler(async(req, res, next)=>{
             error: errors.array()
         })
     }else{
-
+        
   body('name')
       .exists()
       .withMessage('name is required')
@@ -71,9 +70,6 @@ router.post('/register', expressAsyncHandler(async(req, res, next)=>{
             })
         }
     }    
-}
-)
-checkUserCreated()
 }
 ))
 
