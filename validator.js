@@ -1,4 +1,6 @@
-export const validate = (values) => {
+import { body } from 'express-validator';
+
+export const validate = (values) => 
     [
         body('name')
             .exists()
@@ -25,4 +27,3 @@ export const validate = (values) => {
             .withMessage('비밀번호는 문자만 입력가능합니다')
             .bail()
         ]
-}
