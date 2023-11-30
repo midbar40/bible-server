@@ -15,6 +15,7 @@ router.post('/register',
 validate,expressAsyncHandler(async(req, res, next)=>{
     console.log('리퀘바디 : ', req.body)   
     const errors = validationResult(req)
+    console.log('validationResult에러 : ', errors)
     if(!errors.isEmpty()){
         res.status(400).json({
             code:400,
