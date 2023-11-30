@@ -11,9 +11,9 @@ const { Types : {ObjectId} } = mongoose
 const router = express.Router()
 
 
-router.post('/register', 
-[
-    body('name')
+router.post('/register', expressAsyncHandler(async(req, res, next)=>{
+    console.log('리퀘바디 : ', req.body)
+body('name')
     .exists()
     .withMessage('이름을 입력하세요')
     .isString()
@@ -37,9 +37,6 @@ body('password')
     .isString()
     .withMessage('비밀번호는 문자만 입력가능합니다')
     .bail()
-]
-,expressAsyncHandler(async(req, res, next)=>{
-
     
     const errors = validationResult(req)
     if(!errors.isEmpty()){
