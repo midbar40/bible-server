@@ -3,7 +3,6 @@ const User = require('../models/User')
 const expressAsyncHandler = require('express-async-handler')
 const { body, validationResult } = require('express-validator')
 
-
 const mongoose = require('mongoose')
 const { generateToken } = require('../../auth')
 const {  JWT_SECRET } = require('../../config')
@@ -11,38 +10,11 @@ const { Types : {ObjectId} } = mongoose
 
 const router = express.Router()
 
-const checkUserCreated = expressAsyncHandler(async(req,res,next) => {
-  [  body('name')
-        .exists()
-        .withMessage('name is required')
-        .isString()
-        .withMessage('name must be string')
-        .bail(),
-    body('email')
-        .exists()
-        .withMessage('email is required')
-        .isEmail()
-        .withMessage('email must be email format')
-        .bail(),
-    body('userId')
-        .exists()
-        .withMessage('userId is required')  
-        .isString()
-        .withMessage('userId must be string')
-        .bail(),
-    body('password')
-        .exists()
-        .withMessage('password is required')
-        .isString()
-        .withMessage('password must be string')
-        .bail()]
-})
 
 router.post('/register', expressAsyncHandler(async(req, res, next)=>{
+    const checkUserCreated = expressAsyncHandler(async(req, res, next) => {
     console.log('req :', req.body)
     const errors = validationResult(req)
-    console.log('validationResult :', errors)
-
     if(!errors.isEmpty()){
         console.log(errors.array())
         res.status(400).json({
@@ -51,7 +23,32 @@ router.post('/register', expressAsyncHandler(async(req, res, next)=>{
             error: errors.array()
         })
     }else{
-        checkUserCreated()
+
+  body('name')
+      .exists()
+      .withMessage('name is required')
+      .isString()
+      .withMessage('name must be string')
+      .bail(),
+  body('email')
+      .exists()
+      .withMessage('email is required')
+      .isEmail()
+      .withMessage('email must be email format')
+      .bail(),
+  body('userId')
+      .exists()
+      .withMessage('userId is required')  
+      .isString()
+      .withMessage('userId must be string')
+      .bail(),
+  body('password')
+      .exists()
+      .withMessage('password is required')
+      .isString()
+      .withMessage('password must be string')
+      .bail()
+  
         const user = new User({
             name: req.body.name,
             email: req.body.email,
@@ -75,7 +72,9 @@ router.post('/register', expressAsyncHandler(async(req, res, next)=>{
             })
         }
     }    
-}))
+})
+}
+))
 
 router.post('/login', expressAsyncHandler(async(req, res, next)=>{
     const userId = req.body.id
