@@ -11,14 +11,13 @@ const { Types : {ObjectId} } = mongoose
 const router = express.Router()
 
 
-router.post('/register', expressAsyncHandler(async(req, res, next)=>{
-    console.log('리퀘바디 : ', req.body)
-body('name')
+router.post('/register', [
+    body('name')
     .exists()
     .withMessage('이름을 입력하세요')
     .isString()
     .withMessage('이름은 문자만 입력가능합니다')
-    .bail(),
+    .bail().
 body('email')
     .exists()
     .withMessage('이메일을 입력하세요')
@@ -37,14 +36,14 @@ body('password')
     .isString()
     .withMessage('비밀번호는 문자만 입력가능합니다')
     .bail()
-    
+],expressAsyncHandler(async(req, res, next)=>{
+    console.log('리퀘바디 : ', req.body)   
     const errors = validationResult(req)
     if(!errors.isEmpty()){
-        console.log(errors.array())
         res.status(400).json({
             code:400,
             message: 'Invalid Form data for user',
-            error: errors
+            error: errors.array()
         })
     }else{
         const user = new User({
