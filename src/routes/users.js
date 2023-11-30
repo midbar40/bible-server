@@ -26,14 +26,13 @@ validate,expressAsyncHandler(async(req, res, next)=>{
         const user = new User({
             name: req.body.name,
             email: req.body.email,
-            userId: req.body.userId,
             password: req.body.password
         })
         const newUser = await user.save() // DB에 User 생성
         if(!newUser){
             res.status(401).json({ code:401, message: 'Invalid User Data'})
         }else{
-            const { name, email, userId, isAdmin, createdAt } = newUser
+            const { name, email, isAdmin, createdAt } = newUser
             res.cookie('midbar_token', generateToken ,{
                 path:'/',
                 expires: new Date(Date.now() + 3600000),
@@ -42,7 +41,7 @@ validate,expressAsyncHandler(async(req, res, next)=>{
             res.json({
                 code:200,
                 token: generateToken(newUser),
-                name, email, userId, isAdmin, createdAt
+                name, email, isAdmin, createdAt
             })
         }
     }    
@@ -50,9 +49,8 @@ validate,expressAsyncHandler(async(req, res, next)=>{
 ))
 
 router.post('/login', expressAsyncHandler(async(req, res, next)=>{
-    const userId = req.body.id
+    const userId = req.body.email
     const userPw = req.body.pw
-    console.log(id, pw)
    try{ 
     const users = await User.find({})
     if(!users.userId){
