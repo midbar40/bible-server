@@ -72,7 +72,9 @@ router.post('/register', expressAsyncHandler(async(req, res, next)=>{
             })
         }
     }    
-})
+}
+)
+checkUserCreated()
 }
 ))
 
