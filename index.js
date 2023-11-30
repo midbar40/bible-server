@@ -10,6 +10,7 @@ const usersRouter = require('./src/routes/users')
 const praysRouter = require('./src/routes/prays')
 const cookieParser = require('cookie-parser')
 
+
 // 몽고 DB 연결
 mongoose.connect(config.MONGODB_URL)
 .then(() => console.log('몽고DB 연결완료'))
