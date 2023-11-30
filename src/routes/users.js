@@ -11,6 +11,33 @@ const { Types : {ObjectId} } = mongoose
 
 const router = express.Router()
 
+const checkUserCreated = expressAsyncHandler(async(req,res,next) => {
+  [  body('name')
+        .exists()
+        .withMessage('name is required')
+        .isString()
+        .withMessage('name must be string')
+        .bail(),
+    body('email')
+        .exists()
+        .withMessage('email is required')
+        .isEmail()
+        .withMessage('email must be email format')
+        .bail(),
+    body('userId')
+        .exists()
+        .withMessage('userId is required')  
+        .isString()
+        .withMessage('userId must be string')
+        .bail(),
+    body('password')
+        .exists()
+        .withMessage('password is required')
+        .isString()
+        .withMessage('password must be string')
+        .bail()]
+})
+
 router.post('/register', expressAsyncHandler(async(req, res, next)=>{
     console.log('req :', req.body)
     const errors = validationResult(req)
@@ -24,32 +51,7 @@ router.post('/register', expressAsyncHandler(async(req, res, next)=>{
             error: errors.array()
         })
     }else{
-        const checkUserCreated = [
-            body('name')
-                .exists()
-                .withMessage('name is required')
-                .isString()
-                .withMessage('name must be string')
-                .bail(),
-            body('email')
-                .exists()
-                .withMessage('email is required')
-                .isEmail()
-                .withMessage('email must be email format')
-                .bail(),
-            body('userId')
-                .exists()
-                .withMessage('userId is required')  
-                .isString()
-                .withMessage('userId must be string')
-                .bail(),
-            body('password')
-                .exists()
-                .withMessage('password is required')
-                .isString()
-                .withMessage('password must be string')
-                .bail()
-        ]
+        checkUserCreated()
         const user = new User({
             name: req.body.name,
             email: req.body.email,
