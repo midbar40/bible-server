@@ -35,8 +35,8 @@ const validateUserPassword = () => {
     .bail()
     // Form 에서 전달된 password 정보가 일치하는지 검사
     // value : password
-    .custom((value, { req }) => req.body.confirmPassword === value)
-    .withMessage("Passwords don't match.")
+    // .custom((value, { req }) => req.body.confirmPassword === value)
+    // .withMessage("Passwords don't match.")
 }
 
 module.exports = {
