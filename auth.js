@@ -13,7 +13,6 @@ const generateToken = (user) => { //토큰 생성
     config.JWT_SECRET,
     {
         expiresIn: '1d', // 만료기한 (하루)
-        issure: 'midbar'
     })
 }
 
