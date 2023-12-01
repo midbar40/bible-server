@@ -84,13 +84,12 @@ router.post('/login', expressAsyncHandler(async(req, res, next)=>{
             message: '로그인 성공'
         })
         console.log('로그인 성공')      
-        next()
     }  
-    
    }catch(err){
     res.json('로그인에러 :', err)
     console.log('로그인에러 :', err)
    }
+   next()
 }))
 
 router.get('/isLogin', expressAsyncHandler(async(req, res, next)=>{
@@ -99,7 +98,6 @@ router.get('/isLogin', expressAsyncHandler(async(req, res, next)=>{
         message: '로그인 중입니다',
         token: req.cookies.midbar_token
     })
-    
 }))
 
 router.post('/logout', expressAsyncHandler(async(req, res, next)=>{
