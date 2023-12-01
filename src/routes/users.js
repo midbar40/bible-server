@@ -22,6 +22,7 @@ router.post('/register',
     validateUserPassword()
 ],expressAsyncHandler(async(req, res, next)=>{
     const result = validationResult(req)
+    console.log('실행테스트')
     body('email').custom(async (value, { req }) => {
     console.log('벨류 :', value)
         const userEmail = await User.find({ email: value })
