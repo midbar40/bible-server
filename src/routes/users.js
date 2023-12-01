@@ -18,7 +18,7 @@ const router = express.Router()
 router.post('/register', 
 [
     validateUserName(),
-    validateUserEmail(),
+    validateUserEmail(req.body.email),
     validateUserPassword()
 ],expressAsyncHandler(async(req, res, next)=>{
     const result = validationResult(req)
@@ -38,11 +38,6 @@ router.post('/register',
             res.status(401).json({ code:401, message: 'Invalid User Data'})
         }else{
             const { name, email, isAdmin, createdAt } = newUser
-            res.cookie('midbar_token', generateToken(newUser) ,{
-                path:'/',
-                expires: new Date(Date.now() + 3600000),
-                httpOnly: true,
-            })
             res.json({
                 code:200,
                 token: generateToken(newUser),

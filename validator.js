@@ -4,7 +4,7 @@ const isFieldEmpty = (field) => { // Form 필드가 비어있는지 검사
     return body(field)
     .not()
     .isEmpty()
-    .withMessage(`user ${field} is required`)
+    .withMessage(` ${field} 작성되어야 합니다`)
     .bail() // if email is empty, the following will not be run
     .trim() // 공백제거
 }
@@ -13,10 +13,21 @@ const validateUserName = () => {
     .isLength({ min: 2, max: 20 }) // 2~20자
     .withMessage("이름은 2~20자 사이로 입력해주세요")
 }
-const validateUserEmail = () => {
+const validateUserEmail = (value) => {
     return isFieldEmpty("email")
     .isEmail() // 이메일 형식에 맞는지 검사
     .withMessage("유효하지 않은 이메일 형식입니다")
+    .custom(async (value) => { // 이메일 중복 검사
+        return User.findOne({ email : value })
+        .then(user => {
+            if(user) {
+                return Promise.reject('이미 사용중인 이메일입니다')
+            }
+        })
+        .catcH(err =>{
+            console.log(err)
+        })
+    })
 } 
 
 const validateUserPassword = () => {
