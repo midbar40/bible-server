@@ -1,7 +1,7 @@
 const express = require('express')
 const User = require('../models/User')
 const expressAsyncHandler = require('express-async-handler')
-const { validationResult } = require('express-validator')
+const { body, validationResult } = require('express-validator')
 const {    
     validateUserName,
     validateUserEmail,
@@ -17,11 +17,20 @@ const router = express.Router()
 
 router.post('/register', 
 [
-    validateUserName,
-    validateUserEmail,
-    validateUserPassword
+    validateUserName(),
+    validateUserEmail(),
+    validateUserPassword()
 ],expressAsyncHandler(async(req, res, next)=>{
     const result = validationResult(req)
+    body('email').custom(async (value, { req }) => {
+    console.log('벨류 :', value)
+        const userEmail = await User.find({ email: value })
+        if(userEmail){
+            return Promise.reject('이미 사용중인 이메일입니다')
+        } else {
+            return Promise.resolve()
+        }
+    })
     if(result.errors.length > 0){
         console.log('에러목록: ', result.errors.map((v)=>v.msg))
         res.json({
@@ -40,7 +49,6 @@ router.post('/register',
             const { name, email, isAdmin, createdAt } = newUser
             res.json({
                 code:200,
-                token: generateToken(newUser),
                 name, email, isAdmin, createdAt
             })
         }

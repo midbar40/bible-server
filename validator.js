@@ -13,21 +13,10 @@ const validateUserName = () => {
     .isLength({ min: 2, max: 20 }) // 2~20자
     .withMessage("이름은 2~20자 사이로 입력해주세요")
 }
-const validateUserEmail = (req,res,next) => {
+const validateUserEmail = () => {
     return isFieldEmpty("email")
     .isEmail() // 이메일 형식에 맞는지 검사
     .withMessage("유효하지 않은 이메일 형식입니다")
-    .custom(async () => { // 이메일 중복 검사
-        return User.findOne({ email : req.body })
-        .then(user => {
-            if(user) {
-                return Promise.reject('이미 사용중인 이메일입니다')
-            }
-        })
-        .catcH(err =>{
-            console.log(err)
-        })
-    })
 } 
 
 const validateUserPassword = () => {
