@@ -6,7 +6,6 @@ const generateToken = (user) => { //토큰 생성
         _id: user._id, // 사용자 정보(json)
         name: user.name,
         email: user.email,
-        userId: user.userId,
         isAdmin: user.isAdmin,
         createdAt:user.createdAt,
     },

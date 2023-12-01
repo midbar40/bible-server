@@ -18,7 +18,7 @@ mongoose.connect(config.MONGODB_URL)
 
 let corsOptions = {
     origin: 'http://127.0.0.1:5500',
-    credentials: true
+    credentials: true,
 }
 
 // 공통 미들웨어

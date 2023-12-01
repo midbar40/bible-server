@@ -1,4 +1,5 @@
 const { body } = require('express-validator');
+const User = require('./src/models/User'); // 사용자 모델 임포트
 
 const isFieldEmpty = (field) => { // Form 필드가 비어있는지 검사
     return body(field)
@@ -17,6 +18,15 @@ const validateUserEmail = () => {
     return isFieldEmpty("email")
     .isEmail() // 이메일 형식에 맞는지 검사
     .withMessage("유효하지 않은 이메일 형식입니다")
+    .custom(async (value) => {
+        // 이메일 중복 체크
+        console.log('벨류 :', value)
+        const user = await User.findOne({ email: value });
+        if (user) {
+          throw new Error('이미 가입된 아이디(이메일)입니다');
+        }
+        return true; // 중복되지 않은 경우에는 true 반환
+      });
 } 
 
 const validateUserPassword = () => {
