@@ -97,6 +97,7 @@ router.get('/isLogin', expressAsyncHandler(async(req, res, next)=>{
         message: '로그인 중입니다',
         token: req.cookies.midbar_token
     })
+    console.log('로그인 중입니다')
 }))
 
 router.post('/logout', expressAsyncHandler(async(req, res, next)=>{
