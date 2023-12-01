@@ -11,27 +11,27 @@ const isFieldEmpty = (field) => { // Form 필드가 비어있는지 검사
 const validateUserName = () => {
     return isFieldEmpty("name")
     .isLength({ min: 2, max: 20 }) // 2~20자
-    .withMessage("user name length must be between 2 ~ 20 characters")
+    .withMessage("이름은 2~20자 사이로 입력해주세요")
 }
 const validateUserEmail = () => {
     return isFieldEmpty("email")
     .isEmail() // 이메일 형식에 맞는지 검사
-    .withMessage("user email is not valid")
+    .withMessage("유효하지 않은 이메일 형식입니다")
 } 
 
 const validateUserPassword = () => {
     return isFieldEmpty("password")
     .isLength({ min: 6 })
-    .withMessage("password must be more than 7 characters")
+    .withMessage("비밀번호는 6자 이상 입력해주세요")
     .bail()
     .isLength({ max: 12 })
-    .withMessage("password must be lesser than 15 characters")
+    .withMessage("비밀번호는 12자 이하로 입력해주세요")
     .bail()
     .not()
     .isAlpha()
-    .withMessage("password must be at least 1 number")
+    .withMessage("비밀번호는 숫자를 포함해야 합니다")
     .matches(/[!@#$%^&*]/)
-    .withMessage("password must be at least 1 special charactor")
+    .withMessage("비밀번호는 특수문자를 포함해야 합니다")
     .bail()
     // Form 에서 전달된 password 정보가 일치하는지 검사
     // value : password

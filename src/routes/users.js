@@ -21,14 +21,12 @@ router.post('/register',
     validateUserEmail(),
     validateUserPassword()
 ],expressAsyncHandler(async(req, res, next)=>{
-    const errors = validationResult(req)
-    console.log('validationResult에러 : ', errors)
-    if(!errors.isEmpty()){
-        res.status(400).json({
+    const result = validationResult(req)
+    if(result.errors.length > 0){
+        console.log('에러목록: ', result.errors.map((v)=>v.msg))
+        res.json({
             code:400,
-            message: 'Invalid Form data for user',
-            error: errors.array()
-        })
+            error: result.errors.map((v)=>v.msg)})
     }else{
         const user = new User({
             name: req.body.name,
@@ -50,6 +48,7 @@ router.post('/register',
                 token: generateToken(newUser),
                 name, email, isAdmin, createdAt
             })
+            res.redirect('http://127.0.0.1:5500/html/login.html')
         }
     }    
 }
