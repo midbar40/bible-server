@@ -74,8 +74,8 @@ router.post('/login', expressAsyncHandler(async(req, res, next)=>{
             path: '/',
             expires: new Date(Date.now() + 900000),
             httpOnly: true,
-            secure: false,
-            sameSite: 'none'
+            secure: true,
+            sameSite: 'none',
         })
         
         res.json({
