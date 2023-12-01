@@ -17,9 +17,9 @@ const router = express.Router()
 
 router.post('/register', 
 [
-    validateUserName(),
-    validateUserEmail(req.body.email),
-    validateUserPassword()
+    validateUserName,
+    validateUserEmail,
+    validateUserPassword
 ],expressAsyncHandler(async(req, res, next)=>{
     const result = validationResult(req)
     if(result.errors.length > 0){
