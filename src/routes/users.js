@@ -38,7 +38,7 @@ router.post('/register',
             res.status(401).json({ code:401, message: 'Invalid User Data'})
         }else{
             const { name, email, isAdmin, createdAt } = newUser
-            res.cookie('midbar_token', generateToken ,{
+            res.cookie('midbar_token', generateToken(newUser) ,{
                 path:'/',
                 expires: new Date(Date.now() + 3600000),
                 httpOnly: true,
@@ -48,7 +48,6 @@ router.post('/register',
                 token: generateToken(newUser),
                 name, email, isAdmin, createdAt
             })
-            res.redirect('http://127.0.0.1:5500/html/login.html')
         }
     }    
 }
