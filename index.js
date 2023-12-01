@@ -17,7 +17,7 @@ mongoose.connect(config.MONGODB_URL)
 .catch((e) => `몽고DB 연결 실패 : ${e}`)
 
 let corsOptions = {
-    origin: '*',
+    origin: 'https://midbar40.github.io',
     credentials: true,
 }
 
