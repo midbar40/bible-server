@@ -20,19 +20,15 @@ router.post('/register',
     validateUserName(),
     validateUserEmail(),
     validateUserPassword()
-],expressAsyncHandler(async(req, res, next)=>{
+],expressAsyncHandler(async(err, req, res, next)=>{
+   
     const result = validationResult(req)
-    console.log('실행테스트')
-    body('email').custom(async (value, { req }) => {
-    console.log('벨류 :', value)
-        const userEmail = await User.find({ email: value })
-        if(userEmail){
-            return Promise.reject('이미 사용중인 이메일입니다')
-        } else {
-            return Promise.resolve()
-        }
-    })
-    if(result.errors.length > 0){
+    console.log('에러내용', err)
+    // if (err.name === 'MongoServerError' && err.code === 11000) {
+    //     // Duplicate username
+    //     return res.status(422).send({ succes: false, message: '이미 존재하' });
+    // }
+        if(result.errors.length > 0){
         console.log('에러목록: ', result.errors.map((v)=>v.msg))
         res.json({
             code:400,
