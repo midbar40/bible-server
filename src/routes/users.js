@@ -73,8 +73,9 @@ router.post('/login', expressAsyncHandler(async(req, res, next)=>{
         res.cookie('midbar_token', generateToken(users), {
             path: '/',
             expires: new Date(Date.now() + 900000),
-            
-
+            httpOnly: true,
+            secure: false,
+            sameSite: 'none'
         })
         
         res.json({
