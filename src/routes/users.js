@@ -101,8 +101,13 @@ router.get('/isLogin', expressAsyncHandler(async(req, res, next)=>{
 }))
 
 router.post('/logout', expressAsyncHandler(async(req, res, next)=>{
-    res.clearCookie('midbar_token').redirect('/')
-    res.json('로그아웃')
+    res.clearCookie('midbar_token')
+    console.log('로그아웃 되었습니다.')
+    res.json({
+        code:200, 
+        message: '로그아웃 되었습니다.',
+        token: ''
+    })
 }))
 
 router.put('/:id', expressAsyncHandler(async(req, res, next)=>{
