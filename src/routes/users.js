@@ -92,12 +92,23 @@ router.post('/login', expressAsyncHandler(async(req, res, next)=>{
 }))
 
 router.get('/isLogin', expressAsyncHandler(async(req, res, next)=>{
-    res.json({
-        code:200, 
-        message: '로그인 중입니다',
-        token: req.cookies.midbar_token
-    })
-    console.log('로그인 중입니다')
+    if(!req.cookies.midbar_token){
+        res.json({
+            code:400, 
+            message: '로그인한 사용자가 없습니다.',
+            token: ''
+        })
+        console.log('로그인한 사용자가 없습니다.')
+    }
+        else {
+            res.json({
+                code:200, 
+                message: '로그인 중입니다',
+                token: req.cookies.midbar_token
+            })
+            console.log('로그인 중입니다')
+        }
+ 
 }))
 
 router.post('/logout', expressAsyncHandler(async(req, res, next)=>{
