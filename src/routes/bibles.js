@@ -21,7 +21,6 @@ router.get('/', expressAsyncHandler(async(req, res) => {
 
 // 성경전문검색
 router.get('/search', expressAsyncHandler(async(req, res) => {
-    console.log(req.query.query)
     try{
     const bibles = await Bible.find({content: {$regex: req.query.query}})
     console.log('바이블서버', bibles)
@@ -33,7 +32,6 @@ router.get('/search', expressAsyncHandler(async(req, res) => {
 
 // 성경 랜덤조회
 router.get('/random', expressAsyncHandler(async(req, res) => {
-    console.log(req.query)
     try{
         const bibles = await Bible.aggregate([{$sample: {size: 1}}])
         console.log('조회결과 :',bibles)
@@ -45,8 +43,6 @@ router.get('/random', expressAsyncHandler(async(req, res) => {
 
 // 성경클릭한 성서만 조회
 router.get('/read', expressAsyncHandler(async(req, res) => {
-    console.log(req.query)
-
     try{
         const bible = await Bible.find({book: req.query.query})
         res.status(200).json({ code: 200, message: '성서본문조회성공', bible})
