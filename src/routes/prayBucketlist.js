@@ -93,7 +93,7 @@ router.put('/checked', expressAsyncHandler(async(req, res, next)=>{
         {_id: req.body._id},
         {
         isDone: req.body.isDone,
-        finishedAt: Date.now()
+        finishedAt: req.body.finishedAt
        },
        { new: true }
        )
