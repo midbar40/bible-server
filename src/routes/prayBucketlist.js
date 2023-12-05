@@ -1,12 +1,12 @@
 const express = require('express')
-const prayBucketlist = require('../models/PrayBucketlist')
+const PrayBucketlist = require('../models/PrayBucketlist')
 const expressAsyncHandler = require('express-async-handler')
 
 const router = express.Router()
 
 // 기도버킷리스트 저장
 router.post('/', expressAsyncHandler(async(req, res, next)=> {
-    const prayBucketlist = new prayBucketlist({
+    const prayBucketlist = new PrayBucketlist({
         number: req.body.number,
         content: req.body.content,
         createdAt: req.body.createdAt
