@@ -92,6 +92,7 @@ router.put('/:id', expressAsyncHandler(async(req, res, next)=>{
 }))
 
 router.delete('/', expressAsyncHandler(async(req, res, next)=>{
+    console.log('기도제목 삭제', req.body._id, req.body)
     PrayBucketlist.findOneAndDelete({_id: new ObjectId(req.body._id)})
     .then(result =>{
         console.log('기도제목 삭제 성공', result)
