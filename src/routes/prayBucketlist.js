@@ -9,17 +9,18 @@ router.post('/', expressAsyncHandler(async(req, res, next)=> {
     const prayBucketlist = new PrayBucketlist({
         number: req.body.number,
         detail: req.body.detail,
+        author: req.body.author,
         createdAt: Date.now(),
 })
     const newPrayBucketlist = await prayBucketlist.save()
     if(!newPrayBucketlist){
         res.status(401).json({ code:401, message: '기도 버킷리스트 저장 실패'})
     }else{
-        const { number, detail, createdAt } = newPrayBucketlist
+        const { number, detail, author, createdAt } = newPrayBucketlist
         res.json({
             code:200,
             message: '기도 버킷리스트 저장 성공',
-            number, detail, createdAt
+            number, detail, author, createdAt
         })
     }
 }))
