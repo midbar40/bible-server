@@ -43,10 +43,9 @@ router.post('/saveBucket', expressAsyncHandler(async(req, res, next)=> {
 }))
    
 
-
-
-
+// 기도버킷리스트 조회
 router.post('/getBucket', expressAsyncHandler(async(req, res, next)=>{
+    console.log('기도버킷리스트 조회', req.body)
     User.findOne({email: req.body.email})
     .then(user => {
         if(user){
