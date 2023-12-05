@@ -87,8 +87,31 @@ router.post('/', expressAsyncHandler(async(req, res, next)=>{
     res.json('새로운 기도제목 추가')
 }))
 
-router.put('/:id', expressAsyncHandler(async(req, res, next)=>{
-    res.json('특정 기도제목 변경')
+// 체크박스 클릭시 응답부분 날짜 업데이트
+router.put('/checked', expressAsyncHandler(async(req, res, next)=>{
+    PrayBucketlist.findOneAndUpdate(
+        {_id: req.body._id},
+        {
+        isDone: req.body.isDone,
+        finishedAt: Date.now()
+       },
+       { new: true }
+       )
+         .then(result =>{
+              console.log('응답날짜 수정 성공', result)
+              res.json({
+                code: 200,
+                message: '응답날짜 수정 성공',
+                result
+              })
+         })
+            .catch(err =>{
+                res.json({
+                    code: 500,
+                    message: '응답날짜 수정 실패',
+                    err
+                })
+            })
 }))
 
 router.delete('/', expressAsyncHandler(async(req, res, next)=>{
