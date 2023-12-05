@@ -6,7 +6,7 @@ const expressAsyncHandler = require('express-async-handler')
 const router = express.Router()
 
 // 기도버킷리스트 저장
-router.post('/', expressAsyncHandler(async(req, res, next)=> {
+router.post('/saveBucket', expressAsyncHandler(async(req, res, next)=> {
     User.findOne({email: req.body.email})
     .then(user =>{
         if(user){
@@ -46,8 +46,35 @@ router.post('/', expressAsyncHandler(async(req, res, next)=> {
 
 
 
-router.get('/', expressAsyncHandler(async(req, res, next)=>{
-    res.json('전체 기도목록 조회')
+router.post('/getBucket', expressAsyncHandler(async(req, res, next)=>{
+    User.findOne({email: req.body.email})
+    .then(user => {
+        if(user){
+            PrayBucketlist.find({author: user._id})
+            .then(result =>{
+                console.log('기도버킷리스트 조회 성공', result)
+                res.json({
+                    code: 200,
+                    message: '기도버킷리스트 조회 성공',
+                    result
+                })
+            })
+            .catch(err =>{
+                res.json({
+                    code: 500,
+                    message: '기도버킷리스트 조회 실패',
+                    err
+                })
+            })
+        }
+    })
+    .catch(err =>{
+        res.json({
+            code: 500,
+            message: '유저가 존재하지 않습니다.',
+            err
+        })
+    })
 }))
 
 router.get('/:id', expressAsyncHandler(async(req, res, next)=>{
