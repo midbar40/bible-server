@@ -4,19 +4,19 @@ const { Schema } = mongoose
 const { Types: { ObjectId }} = Schema
 
 
-const praySchema = new Schema({
+const PrayBucketlistSchema = new Schema({
     author:{
         type: ObjectId,
         required: true,
         ref: 'User',
     },
-    title:{
-        type: String,
-        required: true,
+    number:{
+        type: Number,
         trim: true,
     },
-    description:{
+    detail:{
         type: String,
+        required: true,
         trim: true,
     },
     isDone:{
@@ -34,9 +34,8 @@ const praySchema = new Schema({
     finishedAt:{
         type: Date,
         default:Date.now,
-    },
-
+    }
 })
 
-const Pray = mongoose.model('Pray', praySchema)
-module.exports = Pray
+const PrayBucketlist = mongoose.model('PrayBucketlist', PrayBucketlistSchema)
+module.exports = PrayBucketlist
