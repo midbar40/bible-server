@@ -80,7 +80,8 @@ router.post('/login', expressAsyncHandler(async(req, res, next)=>{
         
         res.json({
             code: 200,
-            token: generateToken(users),
+            token: generateToken(users), 
+            user: users.name,
             message: '로그인 성공'
         })
         console.log('로그인 성공')      
