@@ -9,7 +9,7 @@ router.post('/', expressAsyncHandler(async(req, res, next)=> {
     const prayBucketlist = new PrayBucketlist({
         number: req.body.number,
         content: req.body.content,
-        createdAt: req.body.createdAt
+        createdAt: Date.now()
 })
     const newPrayBucketlist = await prayBucketlist.save()
     if(!newPrayBucketlist){
