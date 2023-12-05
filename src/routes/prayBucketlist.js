@@ -2,8 +2,11 @@ const express = require('express')
 const PrayBucketlist = require('../models/PrayBucketlist')
 const User = require('../models/User')
 const expressAsyncHandler = require('express-async-handler')
+const mongoose = require('mongoose')
 
 const router = express.Router()
+
+const { Types : {ObjectId} } = mongoose
 
 // 기도버킷리스트 저장
 router.post('/saveBucket', expressAsyncHandler(async(req, res, next)=> {
