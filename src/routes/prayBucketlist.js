@@ -88,7 +88,7 @@ router.put('/edit', expressAsyncHandler(async(req, res, next)=>{
         {_id: req.body._id},
         {
             detail: req.body.detail,
-            updatedAt: req.body.updatedAt
+            lastModifiedAt: req.body.lastModifiedAt
         },
         {new: true}
     )
