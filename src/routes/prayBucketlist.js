@@ -41,8 +41,6 @@ router.post('/saveBucket', expressAsyncHandler(async(req, res, next)=> {
             err
         })
     })
-
-
 }))
    
 
@@ -83,6 +81,7 @@ router.get('/:id', expressAsyncHandler(async(req, res, next)=>{
     res.json('특정 기도제목 조회')
 }))
 
+// 기도버킷리스트 내용 수정
 router.put('/edit', expressAsyncHandler(async(req, res, next)=>{
     PrayBucketlist.findOneAndUpdate(
         {_id: req.body._id},
@@ -136,6 +135,7 @@ router.put('/checked', expressAsyncHandler(async(req, res, next)=>{
             })
 }))
 
+// 기도버킷리스트 삭제
 router.delete('/', expressAsyncHandler(async(req, res, next)=>{
     console.log('기도제목 삭제', req.body._id, req.body)
     PrayBucketlist.findOneAndDelete({_id: req.body._id})
