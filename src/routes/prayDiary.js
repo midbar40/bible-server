@@ -1,11 +1,13 @@
 const express = require('express')
-const mongoose = require('mongoose')
-const { Types: { ObjectId }} = mongoose
 const router = express.Router()
-
 const PrayDiary = require('../models/PrayDiary')
 const User = require('../models/User')
 const expressAsyncHandler = require('express-async-handler')
+
+
+const mongoose = require('mongoose')
+const { Types: { ObjectId }} = mongoose
+
 
 // 기도일기 저장
 router.post('/saveDiary', expressAsyncHandler(async(req, res, next)=>{
