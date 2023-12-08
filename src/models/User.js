@@ -29,13 +29,10 @@ const userSchema = new Schema({
         type: Date,
         default:Date.now,
     },
-<<<<<<< HEAD
-=======
     prayBucketlist:[{
         type: ObjectId,
         ref: 'PrayBucketlist',
     }]
->>>>>>> e6aff330a7bccc697c90edc4797c51fb43e259ab
 })
 
 const User = mongoose.model('User', userSchema, 'users')
