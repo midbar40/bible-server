@@ -119,3 +119,5 @@ router.delete('/deleteDiary', expressAsyncHandler(async(req, res, next)=>{
         })
     })
 }))
+
+module.exports = router
