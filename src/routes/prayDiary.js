@@ -17,6 +17,7 @@ router.post('/saveDiary', expressAsyncHandler(async(req, res, next)=>{
             const prayDiary = new PrayDiary({
                 title: req.body.title,
                 detail: req.body.detail,
+                author: user._id
             })
             return prayDiary.save()
         } else {
