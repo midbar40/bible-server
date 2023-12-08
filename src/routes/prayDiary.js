@@ -75,7 +75,14 @@ router.post('/getDiary', expressAsyncHandler(async(req, res, next)=>{
 
 // 기도일기 수정
 router.put('/editDiary', expressAsyncHandler(async(req, res, next)=>{
-            PrayDiary.findOneAndUpdate({author: user._id})
+            PrayDiary.findOneAndUpdate( 
+                {_id: req.body._id},
+                {
+                    title : req.body.title,
+                    detail: req.body.detail,
+                    lastModifiedAt: req.body.lastModifiedAt
+                },
+                {new: true})
             .then(result =>{
                 console.log('기도일기 수정 성공', result)
                 res.json({
@@ -95,7 +102,7 @@ router.put('/editDiary', expressAsyncHandler(async(req, res, next)=>{
 
 // 기도일기 삭제
 router.delete('/deleteDiary', expressAsyncHandler(async(req, res, next)=>{
-            PrayDiary.findOneAndDelete({author: user._id})
+            PrayDiary.findOneAndDelete({_id: req.body._id})
             .then(result =>{
                 console.log('기도일기 삭제 성공', result)
                 res.json({
