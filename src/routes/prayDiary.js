@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
+const mongoose = require('mongoose')
 const PrayDiary = require('../models/PrayDiary')
 const User = require('../models/User')
 const expressAsyncHandler = require('express-async-handler')
 
 
-const mongoose = require('mongoose')
 const { Types: { ObjectId }} = mongoose
 
 
