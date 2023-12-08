@@ -5,11 +5,14 @@ const mongoose = require('mongoose')
 const axios = require('axios')
 const cors = require('cors')
 const config  = require('./config')
-const biblesRouter = require('./src/routes/bibles')
-const usersRouter = require('./src/routes/users')
-const praysRouter = require('./src/routes/prays')
 const cookieParser = require('cookie-parser')
 
+// 라우터 임포트
+const biblesRouter = require('./src/routes/bibles')
+const usersRouter = require('./src/routes/users')
+const prayBucketlistRouter = require('./src/routes/prayBucketlist')
+const graceRouter = require('./src/routes/grace')
+const prayDiaryRouter = require('./src/routes/prayDiary')
 
 // 몽고 DB 연결
 mongoose.connect(config.MONGODB_URL)
@@ -27,9 +30,12 @@ app.use(express.json()) //request body 파싱
 app.use(logger('tiny')) // logger 설정
 app.use(cookieParser())
 
+// 라우터 설정
 app.use('/api/bible', biblesRouter)
 app.use('/api/users', usersRouter)
-app.use('/api/prays', praysRouter)
+app.use('/api/prayBucketlist', prayBucketlistRouter)
+app.use('/api/grace', graceRouter)
+app.use('/api/prayDiary', prayDiaryRouter)
 
 // fallback handler
 app.use((req, res, next) => { // 사용자가 요청한 페이지가 없는 경우 에러처리
