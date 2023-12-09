@@ -74,6 +74,27 @@ router.post('/getDiary', expressAsyncHandler(async(req, res, next)=>{
     })
 }))
 
+// 기도일기 특정일기 상세조회
+router.post('/getDiaryDetail', expressAsyncHandler(async(req, res, next)=>{
+    console.log('_id 리퀘바디id:', req.body._id)
+    PrayDiary.findOne({_id : req.body._id}) 
+    .then(result =>{
+        console.log('기도일기 상세조회 성공', result)
+        res.json({
+            code: 200,
+            message: '기도일기 상세조회 성공',
+            result
+        })
+    })
+    .catch(err =>{
+        res.json({
+            code: 500,
+            message: '기도일기 상세조회 실패',
+            err
+        })
+    })
+}))
+
 // 기도일기 수정
 router.put('/editDiary', expressAsyncHandler(async(req, res, next)=>{
             PrayDiary.findOneAndUpdate( 
