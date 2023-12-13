@@ -97,6 +97,7 @@ router.post('/getDiaryDetail', expressAsyncHandler(async(req, res, next)=>{
 
 // 기도일기 수정
 router.put('/editDiary', expressAsyncHandler(async(req, res, next)=>{
+    console.log('기도일기 수정', req.body)
             PrayDiary.findOneAndUpdate( 
                 {_id: req.body._id},
                 {
