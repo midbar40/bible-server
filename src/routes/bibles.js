@@ -43,8 +43,9 @@ router.get('/random', expressAsyncHandler(async(req, res) => {
 
 // 성경클릭한 성서만 조회
 router.get('/read', expressAsyncHandler(async(req, res) => {
+    console.log('리퀘쿼리', req.query)
     try{
-        const bible = await Bible.find({book: req.query.query})
+        const bible = await Bible.find({ book: req.query.query }).sort({ verse: 1 })
         res.status(200).json({ code: 200, message: '성서본문조회성공', bible})
     } catch(err){
         res.status(500).send()
@@ -57,7 +58,7 @@ router.get('/psalms', expressAsyncHandler(async(req, res)=> {
 try{
     const { title } = req.query
     // console.log(title)
-    const psalms = await Bible.find({title: "시편"})
+    const psalms = await Bible.find({title: "시편"}).sort({ verse: 1 })
     res.status(200).json({code:200, message: '시편조회 성공', psalms})
 }catch(err){
     res.status(500).send()
