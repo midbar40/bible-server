@@ -14,6 +14,7 @@ const prayBucketlistRouter = require('./src/routes/prayBucketlist')
 const graceRouter = require('./src/routes/grace')
 const prayDiaryRouter = require('./src/routes/prayDiary')
 const pickPostRouter = require('./src/routes/pickPosts')
+const bibleParagraphsRouter = require('./src/routes/bibleParagraphs')
 
 // 몽고 DB 연결
 mongoose.connect(config.MONGODB_URL)
@@ -38,6 +39,7 @@ app.use('/api/prayBucketlist', prayBucketlistRouter)
 app.use('/api/grace', graceRouter)
 app.use('/api/prayDiary', prayDiaryRouter)
 app.use('/api/pickPosts', pickPostRouter)
+app.use('/api/bibleParagraphs', bibleParagraphsRouter)
 
 // fallback handler
 app.use((req, res, next) => { // 사용자가 요청한 페이지가 없는 경우 에러처리
