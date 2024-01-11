@@ -9,9 +9,10 @@ const { Types : {ObjectId} } = mongoose
 const router = express.Router()
 
 // 성경구절 조회
-router.get('/salvation', expressAsyncHandler(async(req, res) => {
+router.get('/:category', expressAsyncHandler(async(req, res) => {
+    console.log('성경구절 조회', req.params)
     try{
-    const bibleParagraphs = await BibleParagraph.find()
+    const bibleParagraphs = await BibleParagraph.find({category: req.params.category})
     res.status(200).json({ code: 200, message: '성경구절조회 성공', bibleParagraphs})
     // console.log(bibles)
 } catch(err){
