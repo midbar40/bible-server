@@ -21,17 +21,18 @@ router.get('/', expressAsyncHandler(async(req, res) => {
 
 // 성경전문검색
 router.get('/search', expressAsyncHandler(async (req, res) => {
-    console.log('리퀘쿼리', req.query)
+    const words = req.query.query.split(/\s+/).filter(word => word.trim() !== '');
+    console.log('리퀘쿼리', words)
     try {
       const page = parseInt(req.query.page) || 1;
       const perPage = 20; // 페이지당 아이템 수
   
       const skipItems = (page - 1) * perPage;
   
-      const bibles = await Bible.find({ content: { $regex: req.query.query } }).sort({ book:1, chapter:1, verse: 1})
+      const bibles = await Bible.find({ content: { $all: words.map(word => new RegExp(word, 'i')) } })
+        .sort({ book:1, chapter:1, verse: 1})
         .skip(skipItems)
         .limit(perPage);
-  
       res.status(200).json({ code: 200, message: '성경검색 성공', bibles });
     } catch (err) {
       res.status(500).send();
