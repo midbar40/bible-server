@@ -16,7 +16,8 @@ router.post('/saveBucket', expressAsyncHandler(async(req, res, next)=> {
             const prayBucketlist = new PrayBucketlist({
                 number: req.body.number,
                 detail: req.body.detail,
-                author: user._id
+                author: user._id,
+                finishedAt: req.body.finishedAt,
             })
             return prayBucketlist.save()
         } else{
