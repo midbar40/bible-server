@@ -8,6 +8,11 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    mobile:{
+        type: String,
+        required: true,
+        unique: true,
+    },
     email:{
         type: String,
         required: true,
@@ -29,10 +34,6 @@ const userSchema = new Schema({
         type: Date,
         default:Date.now,
     },
-    prayBucketlist:[{
-        type: ObjectId,
-        ref: 'PrayBucketlist',
-    }]
 })
 
 const User = mongoose.model('User', userSchema, 'users')

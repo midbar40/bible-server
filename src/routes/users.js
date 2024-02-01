@@ -4,6 +4,7 @@ const expressAsyncHandler = require('express-async-handler')
 const { validationResult } = require('express-validator')
 const {    
     validateUserName,
+    validateUserMobile,
     validateUserEmail,
     validateUserPassword
 } = require('../../validator')
@@ -13,6 +14,7 @@ const router = express.Router()
 router.post('/register', 
 [
     validateUserName(),
+    validateUserMobile(),
     validateUserEmail(),
     validateUserPassword()
 ],expressAsyncHandler(async(req, res, next)=>{
@@ -28,17 +30,19 @@ router.post('/register',
     }else{
         const user = new User({
             name: req.body.name,
+            mobile: req.body.mobile,
             email: req.body.email,
-            password: req.body.password
+            password: req.body.password,
+            passwordConfirm: req.body.passwordConfirm,
         })
         const newUser = await user.save() // DB에 User 생성
         if(!newUser){
             res.status(401).json({ code:401, message: 'Invalid User Data'})
         }else{
-            const { name, email, isAdmin, createdAt } = newUser
+            const { name, mobile, email, isAdmin, createdAt } = newUser
             res.json({
                 code:200,
-                name, email, isAdmin, createdAt
+                name,mobile, email, isAdmin, createdAt
             })
         }
     }    

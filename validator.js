@@ -14,6 +14,12 @@ const validateUserName = () => {
     .isLength({ min: 2, max: 20 }) // 2~20자
     .withMessage("이름은 2~20자 사이로 입력해주세요")
 }
+const validateUserMobile = (mobile) => {
+    return isFieldEmpty("mobile")
+    .isMobilePhone(mobile, "ko-KR")
+    .isLength({ min: 10, max: 11 }) // 10~11자
+    .withMessage("전화번호는 10~11자 사이로 입력해주세요")
+}
 const validateUserEmail = () => {
     return isFieldEmpty("email")
     .isEmail() // 이메일 형식에 맞는지 검사
@@ -51,6 +57,7 @@ const validateUserPassword = () => {
 
 module.exports = {
     validateUserName,
+    validateUserMobile,
     validateUserEmail,
     validateUserPassword
 }

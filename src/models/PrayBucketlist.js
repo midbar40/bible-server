@@ -10,10 +10,6 @@ const PrayBucketlistSchema = new Schema({
         required: true,
         ref: 'User',
     },
-    number:{
-        type: Number,
-        trim: true,
-    },
     detail:{
         type: String,
         required: true,

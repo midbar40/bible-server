@@ -45,7 +45,6 @@ router.post('/saveGrace', expressAsyncHandler(async(req, res, next)=> {
     .then(user =>{
         if(user){
             const grace = new Grace({
-                number: req.body.number,
                 detail: req.body.detail,
                 author: user._id
             })
