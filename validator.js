@@ -16,7 +16,7 @@ const validateUserName = () => {
 }
 const validateUserMobile = (mobile) => {
     return isFieldEmpty("mobile")
-    .isMobilePhone(mobile, "ko-KR")
+    .isMobilePhone(mobile, "ko-KR") // 이 함수가 잘 작동하는지 알 수 없음
     .isLength({ min: 10, max: 11 }) // 10~11자
     .withMessage("전화번호는 10~11자 사이로 입력해주세요")
 }
