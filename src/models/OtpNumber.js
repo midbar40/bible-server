@@ -24,7 +24,11 @@ expireAt :{
     type: Date,
     default: Date.now,
     index: {expires: '5m'} // 5분후에 만료
-}
+},
+createdAt:{
+    type: Date,
+    default: Date.now,
+},
 })
 
 const Otp = mongoose.model('Otp', otpSchema, 'otpSchema')

@@ -9,13 +9,14 @@ const expressAsyncHandler = require('express-async-handler')
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
+let countNum = 1  
 
 // otp 생성
 router.post('/generateOtp', expressAsyncHandler(async (req, res, next) => {
     console.log('otp 생성 리퀘바디', req.body)
 
     try {
-        const user = await User.findOne({ name: req.body.name, mobile: req.body.mobile })
+        const user = await User.findOne({ mobile: req.body.mobile, name: req.body.name  })
 
         if (!user) {
             res.json({
@@ -24,21 +25,24 @@ router.post('/generateOtp', expressAsyncHandler(async (req, res, next) => {
             })
         } else {
             const code = Math.floor(100000 + Math.random() * 900000).toString();
-        console.log('code :', code)
-        const otpNumber = new OtpNumber({
-            name: req.body.name,
-            mobile: req.body.mobile,
-            code: code,
-            count: req.body.count
-        })
-        await otpNumber.save()
-        if (otpNumber && otpNumber.count > 3) {
+                     
+            const otpNumber = new OtpNumber({
+                name: req.body.name,
+                mobile: req.body.mobile,
+                code: code,
+                count: countNum
+            })
+        if (otpNumber && otpNumber.count >= 4) {
             res.json({
                 code: 400,
                 message: '인증 횟수 초과, 잠시 후 다시 시도해주세요.'
             })
+            // 5분 뒤 count 초기화
+            setTimeout(() => {
+                countNum = 1
+            }, 300000)
         }
-        if (otpNumber && otpNumber.count < 4) {
+        if (otpNumber && otpNumber.count <= 3 && user.authCount <= 9) { 
             const convertedPhoneNumber = `+82${req.body.mobile.slice(1)}`;
             client.messages
                 .create({
@@ -48,12 +52,19 @@ router.post('/generateOtp', expressAsyncHandler(async (req, res, next) => {
                 })
                 .then(message => console.log(message.sid));
             user.authCount = user.authCount + 1
-            otpNumber.count = otpNumber.count + 1    
+            countNum++    
             console.log('유저정보',user)
+            
             await otpNumber.save()
             await user.save()
+
+            return res.json({
+                code: 200,
+                message: 'otp 생성 성공',
+                result: otpNumber
+            })
         }
-        if (user.authCount > 9) {
+        if (user.authCount >= 10) {
             res.json({
                 code: 400,
                 message: '인증 횟수 초과, 24시간 후 다시 시도해주세요.'
@@ -65,11 +76,7 @@ router.post('/generateOtp', expressAsyncHandler(async (req, res, next) => {
             }, 86400000)
         }
         console.log('otpNumber :', otpNumber)
-        return res.json({
-            code: 200,
-            message: 'otp 생성 성공',
-            result: otpNumber
-        })
+  
         }
     }
     catch (err) {
@@ -84,19 +91,22 @@ router.post('/generateOtp', expressAsyncHandler(async (req, res, next) => {
 
 // otp 확인
 router.post('/checkOtp', expressAsyncHandler(async (req, res, next) => {
-    console.log('otp 확인', req.body)
+    console.log('checkOtp 확인', req.body)
     try {
-        const authUser = await OtpNumber.findOne({name: req.body.name , mobile: req.body.mobile, otp: req.body.otp})
+        const authUser = await OtpNumber.findOne({code: req.body.otp, name: req.body.name })
+        const user = await User.findOne({ mobile: req.body.mobile, name: req.body.name  })
+        console.log('authUser :', authUser)
         if(!authUser){
             res.json({
                 code: 400,
                 message: '인증번호가 일치하지 않습니다.'
             })
         } else {
+            console.log('user :', user)
             res.json({
                 code: 200,
                 message: 'otp 확인 성공',
-                result: authUser.email
+                // result: user.email
             })
     }}
     catch (err) {
