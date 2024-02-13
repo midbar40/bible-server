@@ -67,13 +67,14 @@ router.post('/generateOtp', expressAsyncHandler(async (req, res, next) => {
         if (user.authCount >= 10) {
             res.json({
                 code: 400,
-                message: '인증 횟수 초과, 24시간 후 다시 시도해주세요.'
+                message: '인증 횟수 초과, 3시간 후 다시 시도해주세요.'
             })
-            // 24시간 후 authCount 초기화
+            // 3시간 후 authCount 초기화
             setTimeout(() => {
+                console.log('3시간 후 authCount 초기화')
                 user.authCount = 0
                 user.save()
-            }, 86400000)
+            }, 60*60*3)
         }
         console.log('otpNumber :', otpNumber)
   
@@ -106,7 +107,7 @@ router.post('/checkOtp', expressAsyncHandler(async (req, res, next) => {
             res.json({
                 code: 200,
                 message: 'otp 확인 성공',
-                // result: user.email
+                result: user
             })
     }}
     catch (err) {
