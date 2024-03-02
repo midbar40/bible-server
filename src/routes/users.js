@@ -1,6 +1,8 @@
 const express = require('express')
 const User = require('../models/User')
 const expressAsyncHandler = require('express-async-handler')
+
+// express-validator
 const { validationResult } = require('express-validator')
 const {    
     validateUserName,
@@ -8,9 +10,34 @@ const {
     validateUserEmail,
     validateUserPassword
 } = require('../../validator')
+
+// 토큰 생성
 const { generateToken } = require('../../auth')
+
+// 비밀번호 암호화(해싱)
+const bcrypt = require('bcrypt')
+
+// twilo 연동
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require('twilio')(accountSid, authToken);
+
+// 라우터 설정
 const router = express.Router()
 
+// 비밀번호 암호화(해싱)
+async function hashPassword(password){
+    try {
+        const saltRounds = 10
+        const hashedPassword = await bcrypt.hash(password, saltRounds)
+        return hashedPassword
+    } catch (error) {
+        console.log('Hashing failed', error)
+        throw new Error('Hashing failed', error)
+    }
+}
+
+// 회원가입 
 router.post('/register', 
 [
     validateUserName(),
@@ -20,6 +47,9 @@ router.post('/register',
 ],expressAsyncHandler(async(req, res, next)=>{
    
     const result = validationResult(req)
+    const password = req.body.password
+    const passwordConfirm = req.body.passwordConfirm
+
     console.log('리퀘바디', req.body)
 
         if(result.errors.length > 0){
@@ -27,18 +57,27 @@ router.post('/register',
         res.json({
             code:400,
             error: result.errors.map((v)=>v.msg)})
-    }else{
+    }else if(password !== passwordConfirm){
+        res.json({
+            code:400,
+            message: '비밀번호와 비밀번호 확인창 입력내용이 일치하지 않습니다.'
+        })
+        return
+    }
+    else{
+        const hashedPassword = await hashPassword(password)
         const user = new User({
             name: req.body.name,
             mobile: req.body.mobile,
             email: req.body.email,
-            password: req.body.password,
-            passwordConfirm: req.body.passwordConfirm,
+            password: hashedPassword,
+            passwordConfirm: hashedPassword
         })
+       
         const newUser = await user.save() // DB에 User 생성
         if(!newUser){
             res.status(401).json({ code:401, message: 'Invalid User Data'})
-        }else{
+        } else{
             const { name, mobile, email, isAdmin, createdAt } = newUser
             res.json({
                 code:200,
@@ -49,6 +88,7 @@ router.post('/register',
 }
 ))
 
+// 로그인
 router.post('/login', expressAsyncHandler(async(req, res, next)=>{
     const userEmail = req.body.email
     const userPw = req.body.password
@@ -58,6 +98,8 @@ router.post('/login', expressAsyncHandler(async(req, res, next)=>{
         email: userEmail
     })
     console.log('유저', users)
+    const passwordMatch = await bcrypt.compare(userPw, users.password)
+
 
     if(users === null){
         res.json({
@@ -66,7 +108,7 @@ router.post('/login', expressAsyncHandler(async(req, res, next)=>{
         })
         console.log('아이디와 비밀번호를 확인해주세요')
     }   
-    else if(userEmail !== users.email || userPw !== users.password){
+    else if(userEmail !== users.email || !passwordMatch){
         res.json({
             code : 400,
             message: '아이디와 비밀번호를 확인해주세요'
@@ -96,6 +138,7 @@ router.post('/login', expressAsyncHandler(async(req, res, next)=>{
    }
 }))
 
+// 로그인 상태 확인
 router.get('/isLogin', expressAsyncHandler(async(req, res, next)=>{
     if(!req.cookies.midbar_token){
         res.json({
@@ -116,6 +159,7 @@ router.get('/isLogin', expressAsyncHandler(async(req, res, next)=>{
  
 }))
 
+// 로그아웃
 router.post('/logout', expressAsyncHandler(async(req, res, next)=>{
     res.clearCookie('midbar_token')
     console.log('로그아웃 되었습니다.')
@@ -125,6 +169,39 @@ router.post('/logout', expressAsyncHandler(async(req, res, next)=>{
         token: ''
     })
 }))
+
+// 비밀번호 찾기
+router.post('/findPw', expressAsyncHandler(async(req, res, next)=>{
+    const userEmail = req.body.email
+    const tempPassword = Math.random().toString(36).slice(-8)
+    const hashedPassword = await hashPassword(tempPassword)
+    console.log('리퀘바디', req.body)
+    try{
+        const users = await User.findOneAndUpdate({email: userEmail, password: hashedPassword}, {new: true})
+        if(!users){
+            res.json({
+                code: 400,
+                message: '가입된 회원이 아닙니다.'
+            })
+            console.log('가입된 회원이 아닙니다.')
+        } else{
+            res.json({
+                code: 200,
+                message: '임시 비밀번호가 발급되었습니다.',
+                userData : users.mobile
+            })
+            // 트윌로 통해서 문자전송
+
+        }
+    }catch(err){
+        res.json({
+            code: 400, 
+            message: '비밀번호 찾기 에러',
+        })
+        console.log('비밀번호 찾기 에러 :', err)
+    }
+}))
+
 
 router.put('/:id', expressAsyncHandler(async(req, res, next)=>{
     res.json('사용자정보 변경')
