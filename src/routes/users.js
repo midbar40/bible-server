@@ -99,7 +99,7 @@ router.post('/login', expressAsyncHandler(async(req, res, next)=>{
     })
     console.log('유저', users)
     const passwordMatch = await bcrypt.compare(userPw, users.password)
-
+    console.log('userPw :',userPw, 'users.password :', users.password)
 
     if(users === null){
         res.json({
@@ -172,12 +172,13 @@ router.post('/logout', expressAsyncHandler(async(req, res, next)=>{
 
 // 비밀번호 찾기
 router.post('/findPw', expressAsyncHandler(async(req, res, next)=>{
-    const userEmail = req.body.email
+    const userEmail = req.body.userId
     const tempPassword = Math.random().toString(36).slice(-8)
     const hashedPassword = await hashPassword(tempPassword)
-    console.log('리퀘바디', req.body)
+    console.log('tempPassword: ',tempPassword)
+    console.log('리퀘바디', req.body.userId)
     try{
-        const users = await User.findOneAndUpdate({email: userEmail, password: hashedPassword}, {new: true})
+        const users = await User.findOne({email: userEmail})
         if(!users){
             res.json({
                 code: 400,
@@ -185,13 +186,22 @@ router.post('/findPw', expressAsyncHandler(async(req, res, next)=>{
             })
             console.log('가입된 회원이 아닙니다.')
         } else{
+            users.password = hashedPassword
+            const temporaryPw= await users.save()
             res.json({
                 code: 200,
                 message: '임시 비밀번호가 발급되었습니다.',
                 userData : users.mobile
             })
             // 트윌로 통해서 문자전송
-
+            const convertedPhoneNumber = `+82${users.mobile.slice(1)}`;
+            client.messages
+                .create({
+                    body: `임시비밀번호 ${tempPassword} 로그인 후 비밀번호를 변경해주세요.`,
+                    from: process.env.TWILIO_SENDER_PHONE,
+                    to: `${convertedPhoneNumber}`
+                })
+                .then(message => console.log(message.sid));
         }
     }catch(err){
         res.json({
