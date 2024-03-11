@@ -151,12 +151,11 @@ router.get('/isLogin', expressAsyncHandler(async(req, res, next)=>{
         else {
             res.json({
                 code:200, 
-                message: '로그인 중입니다',
+                message: '로그인 되었습니다.',
                 token: req.cookies.midbar_token
             })
-            console.log('로그인 중입니다')
+            console.log('로그인 되었습니다.')
         }
- 
 }))
 
 // 로그아웃
@@ -211,6 +210,37 @@ router.post('/findPw', expressAsyncHandler(async(req, res, next)=>{
         console.log('비밀번호 찾기 에러 :', err)
     }
 }))
+// myPage 유저 정보 조회
+router.post('/myPage', expressAsyncHandler(async(req, res, next)=>{
+    const userEmail = req.body.email
+    console.log('리퀘바디', req.body.email)
+    try{
+        const user = await User.findOne({email: req.body.email})
+        if(user){
+            res.json({
+                code:200, 
+                message: '유저정보',
+                userInfo : [user.name, user.email, user.mobile],
+            })
+            console.log('유저정보 조회 성공')
+        }else {
+            res.json({
+                code:400, 
+                message: '유저정보가 없습니다.',
+                userInfo : ''
+            })
+        }
+    }
+        catch(error){
+            res.json({
+                code: 400, 
+                message: '마이페이지 유저조회 에러',
+            })
+            console.log('마이페이지 유저조회 에러 :', error)
+        }
+    })
+)
+
 
 
 router.put('/:id', expressAsyncHandler(async(req, res, next)=>{
