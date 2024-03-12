@@ -242,13 +242,58 @@ router.post('/myPage', expressAsyncHandler(async(req, res, next)=>{
 )
 
 
-
-router.put('/:id', expressAsyncHandler(async(req, res, next)=>{
-    res.json('사용자정보 변경')
+// 회원정보수정 (비밀번호 변경)
+router.put('/changeUserInfo', expressAsyncHandler(async(req, res, next)=>{
+    const userEmail = req.body.email
+    const changedPassword = req.body.password
+    const hashedPassword = await hashPassword(changedPassword)
+    console.log('changedPassword: ',changedPassword)
+    console.log('리퀘바디 비번변경', req.body)
+    try{
+        const users = await User.findOne({email: userEmail})
+        if(!users){
+            res.json({
+                code: 400,
+                message: '정보 수정 중 오류가 발생했습니다.'
+            })
+            console.log('정보 수정 중 오류가 발생했습니다.')
+        } else{
+            users.password = hashedPassword
+            const temporaryPw= await users.save()
+            res.json({
+                code: 200,
+                message: '비밀번호가 변경되었습니다',
+            })
+        }
+    }catch(err){
+        res.json({
+            code: 400, 
+            message: '비밀번호 변경 에러',
+        })
+        console.log('비밀번호 변경 에러 :', err)
+    }
 }))
 
-router.delete('/:id', expressAsyncHandler(async(req, res, next)=>{
-    res.json('사용자정보 삭제')
+router.delete('/deleteUser', expressAsyncHandler(async(req, res, next)=>{
+    const userEmail = req.body.email
+    console.log('리퀘바디 이메일 279줄', req.body.email)
+    try{
+        const user = await User.findOneAndDelete({email: userEmail})
+        if(user){
+            res.json({
+                code:200, 
+                message: '회원탈퇴 되었습니다',
+            })
+            console.log('유저삭제 성공')
+        }
+    }
+    catch(error){
+        res.json({
+            code: 400, 
+            message: '유저삭제 에러',
+        })
+        console.log('유저삭제 에러 :', error)
+    }
 }))
 
 module.exports = router
