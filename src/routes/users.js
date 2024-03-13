@@ -97,7 +97,7 @@ router.post('/login', expressAsyncHandler(async(req, res, next)=>{
     const users = await User.findOne({
         email: userEmail
     })
-    console.log('유저', users)
+    console.log('유저', users === null)
     const passwordMatch = await bcrypt.compare(userPw, users.password)
     console.log('userPw :',userPw, 'users.password :', users.password)
 
@@ -133,8 +133,11 @@ router.post('/login', expressAsyncHandler(async(req, res, next)=>{
         console.log('로그인 성공')      
     }  
    }catch(err){
-    res.json('로그인에러 :', err)
-    console.log('로그인에러 :', err)
+       res.json({
+           code : 400,
+           message: '로그인에 실패하였습니다, 다시 시도해주세요.'
+        })
+        console.log('로그인에러 :', err)
    }
 }))
 
