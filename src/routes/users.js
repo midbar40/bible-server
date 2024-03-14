@@ -98,8 +98,7 @@ router.post('/login', expressAsyncHandler(async(req, res, next)=>{
         email: userEmail
     })
     console.log('유저', users === null)
-    const passwordMatch = await bcrypt.compare(userPw, users.password)
-    console.log('userPw :',userPw, 'users.password :', users.password)
+    console.log('userPw :',userPw, 'users.password :', users?.password)
 
     if(users === null){
         res.json({
@@ -108,7 +107,7 @@ router.post('/login', expressAsyncHandler(async(req, res, next)=>{
         })
         console.log('아이디와 비밀번호를 확인해주세요')
     }   
-    else if(userEmail !== users.email || !passwordMatch){
+    else if(userEmail !== users.email){
         res.json({
             code : 400,
             message: '아이디와 비밀번호를 확인해주세요'
@@ -116,21 +115,30 @@ router.post('/login', expressAsyncHandler(async(req, res, next)=>{
         console.log('아이디와 비밀번호를 확인해주세요')
     }
     else{
-        res.cookie('midbar_token', generateToken(users), {
-            path: '/',
-            expires: new Date(Date.now() + 900000),
-            httpOnly: true,
-            secure: true,
-            sameSite: 'none',
-        })
-        
-        res.json({
-            code: 200,
-            token: generateToken(users), 
-            user: users.email,
-            message: '로그인 성공'
-        })
-        console.log('로그인 성공')      
+        const passwordMatch = await bcrypt.compare(userPw, users?.password)
+        if(passwordMatch){
+            res.cookie('midbar_token', generateToken(users), {
+                path: '/',
+                expires: new Date(Date.now() + 900000),
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+            })
+            
+            res.json({
+                code: 200,
+                token: generateToken(users), 
+                user: users.email,
+                message: '로그인 성공'
+            })
+            console.log('로그인 성공')    
+        } else{
+            res.json({
+                code : 400,
+                message: '아이디와 비밀번호를 확인해주세요'
+            })
+            console.log('아이디와 비밀번호를 확인해주세요')
+        }     
     }  
    }catch(err){
        res.json({
