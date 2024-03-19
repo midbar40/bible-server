@@ -63,7 +63,7 @@ router.post('/register',
             message: '비밀번호와 비밀번호 확인창 입력내용이 일치하지 않습니다.'
         })
         return
-    }
+    } 
     else{
         const hashedPassword = await hashPassword(password)
         const user = new User({
