@@ -7,6 +7,7 @@ const cors = require('cors')
 const config  = require('./config')
 const cookieParser = require('cookie-parser')
 
+
 // 라우터 임포트
 const biblesRouter = require('./src/routes/bibles')
 const usersRouter = require('./src/routes/users')
@@ -24,7 +25,7 @@ mongoose.connect(config.MONGODB_URL)
 .catch((e) => `몽고DB 연결 실패 : ${e}`)
 
 let corsOptions = {
-    origin: ['http://127.0.0.1:5500', 'https://midbar40.github.io'],
+    origin: ['http://127.0.0.1:5500', 'https://closetogod.netlify.app'],
     credentials: true,
 }
 
@@ -53,6 +54,8 @@ app.use((err, req, res, next) => { // 서버 내부 오류 처리
     console.error(err.stack)
     res.status(500).send('서버에 문제가 발생하였습니다.')
 })
-app.listen(3300, () => { /* 서버실행 */
-    console.log('Now listening on port 3300')
+
+const port = process.env.PORT || 8080;
+app.listen(port, () => { /* 서버실행 */
+    console.log(`Now listening on port ${port}`)
 })
